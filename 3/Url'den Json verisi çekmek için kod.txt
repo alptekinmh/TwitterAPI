@@ -1,0 +1,31 @@
+import requests
+import json
+
+def download_and_save_json(url, filename):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+
+        data = response.json()
+
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+        print(f"Veri başarıyla '{filename}' dosyasına kaydedildi.")
+    except requests.exceptions.HTTPError as errh:
+        print(f"Hata HTTP: {errh}")
+    except requests.exceptions.ConnectionError as errc:
+        print(f"Hata Bağlantı: {errc}")
+    except requests.exceptions.Timeout as errt:
+        print(f"Hata Zaman Aşımı: {errt}")
+    except requests.exceptions.RequestException as err:
+        print(f"Hata: {err}")
+
+# JSON verisini indirip kaydetmek için kullanacağımız URL
+json_url = "https://db.fastqr.co/twitter_data_50K.json"
+
+# Kaydedilecek dosyanın adı
+output_filename = " data.json"
+
+# Fonksiyonu çağırarak işlemi gerçekleştir
+download_and_save_json(json_url, output_filename)
